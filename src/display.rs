@@ -1,3 +1,7 @@
+use std::io::{stdout};
+use crossterm::{execute, terminal, style::{self, Stylize}, QueueableCommand, cursor};
+
+
 const X_MAX: i32 = 10;
 const Y_MAX: i32 = 20;
 
@@ -24,6 +28,20 @@ impl Window{
 
         Window {
             map : yv
+        }
+    }
+
+    pub fn draw(&self) {
+        execute!(stdout(), terminal::Clear(terminal::ClearType::All));
+        
+        for y in self.map.iter() {
+            for x in y.iter() {
+                // TODO 2차원 백터 출력
+                
+                // if y == 1 {
+                //     stdout().queue(style::PrintStyledContent("█".magenta()));
+                // }
+            }
         }
     }
 }
