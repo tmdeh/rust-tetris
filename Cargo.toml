@@ -6,4 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-console_engine = "2.6.0"
+termion = "*"
+clearscreen = "2.0.1"
