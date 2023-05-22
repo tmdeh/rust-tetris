@@ -1,10 +1,10 @@
-use std::io::{Stdout, stdout};
+use std::io::{Stdout, stdout, Write};
 
-use crossterm::{ style::{Color, SetForegroundColor, Print}, execute };
+use crossterm::{ style::{Color, SetForegroundColor, Print, self, Stylize}, execute, cursor, terminal, ExecutableCommand };
 
 
 
-const MAX_X: u32 = 12;
+const MAX_X: u32 = 22;
 const MAX_Y: u32 = 21;
 
 pub struct Display {
@@ -35,19 +35,20 @@ impl Display {
     }
 
     pub fn draw(&mut self) {
-        clearscreen::clear().unwrap();
+
+        self.stdout.execute(terminal::Clear(terminal::ClearType::All)).unwrap();
 
         for y in 0..self.map.len() {
             let length = self.map[y].len();
             for x in 0..length {
                 if self.map[y][x] == 1 {
-                    execute!(self.stdout ,SetForegroundColor(Color::White), Print("██"));
-                } else {
-                    print!("  ");
-                }
+                    execute!(self.stdout , cursor::MoveTo(x as u16, y as u16), style::PrintStyledContent( "██".white())).unwrap();
+                } 
             }
-            println!("");
         }
+
+        self.stdout.flush().unwrap();
+
     }
 
 
