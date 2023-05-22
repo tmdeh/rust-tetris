@@ -1,4 +1,6 @@
-use termion::color;
+use std::io::{Stdout, stdout};
+
+use crossterm::{ style::{Color, SetForegroundColor, Print}, execute };
 
 
 
@@ -7,6 +9,7 @@ const MAX_Y: u32 = 21;
 
 pub struct Display {
     map: Vec<Vec<i32>>,
+    stdout: Stdout
 }
 
 impl Display {
@@ -27,6 +30,7 @@ impl Display {
         }
         Display { 
             map: m,
+            stdout: stdout()
         }
     }
 
@@ -37,7 +41,7 @@ impl Display {
             let length = self.map[y].len();
             for x in 0..length {
                 if self.map[y][x] == 1 {
-                    print!("{}██", color::Fg(color::White))
+                    execute!(self.stdout ,SetForegroundColor(Color::White), Print("██"));
                 } else {
                     print!("  ");
                 }
