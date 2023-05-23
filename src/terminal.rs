@@ -1,11 +1,11 @@
 use std::io::{Stdout, stdout, Write};
 
-use crossterm::{ style::{Color, SetForegroundColor, Print, self, Stylize}, execute, cursor, terminal, ExecutableCommand };
+use crossterm::{ style::{ Stylize, PrintStyledContent, Print }, execute, cursor, terminal, ExecutableCommand };
 
 
 
-const MAX_X: u32 = 22;
-const MAX_Y: u32 = 21;
+const MAX_X: u32 = 32;
+const MAX_Y: u32 = 61;
 
 pub struct Display {
     map: Vec<Vec<i32>>,
@@ -28,6 +28,7 @@ impl Display {
             }
             m.push(xv);
         }
+
         Display { 
             map: m,
             stdout: stdout()
@@ -42,8 +43,8 @@ impl Display {
             let length = self.map[y].len();
             for x in 0..length {
                 if self.map[y][x] == 1 {
-                    execute!(self.stdout , cursor::MoveTo(x as u16, y as u16), style::PrintStyledContent( "██".white())).unwrap();
-                } 
+                    execute!(self.stdout, cursor::MoveTo((x as u16) + 100, y as u16), PrintStyledContent( "██".white())).unwrap();
+                }
             }
         }
 
