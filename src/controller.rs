@@ -7,13 +7,16 @@ use std::{
 
 use crossterm::{
     event::{poll, read, Event, KeyCode, KeyModifiers},
-    terminal::enable_raw_mode,
+    terminal::{enable_raw_mode, disable_raw_mode},
 };
+use tui::{backend::CrosstermBackend, Terminal};
 
 pub struct Display {
     stdout: Stdout,
+    // backend: CrosstermBackend<Stdout>,
+    terminal: Terminal<CrosstermBackend<Stdout>>, 
     width: i32,
-    height: i32,
+    height: i32
 }
 
 impl Display {
@@ -21,8 +24,15 @@ impl Display {
         enable_raw_mode().unwrap();
         thread::spawn(Display::key_event);
 
+        let stdout = stdout();
+        let backend =  CrosstermBackend::new(&stdout);
+        let terminal = Terminal::new(backend).unwrap();
+        
+
         Display {
-            stdout: stdout(),
+            stdout,
+            backend,
+            terminal,
             width: w,
             height: h,
         }
@@ -33,23 +43,22 @@ impl Display {
             if poll(Duration::from_millis(500))? {
                 match read()? {
                     Event::Key(event) => {
-                        match event.code {
-                            KeyCode::Up => {
+                        match (event.code, event.modifiers) {
+                            (KeyCode::Up, _) => {
                                 println!("Up")
                             }
-                            KeyCode::Down => {
+                            (KeyCode::Down, _) => {
                                 println!("Down")
                             }
-                            KeyCode::Left => {
+                            (KeyCode::Left, _) => {
                                 println!("Left")
                             }
-                            KeyCode::Right => {
+                            (KeyCode::Right, _) => {
                                 println!("Right")
                             }
-                            KeyCode::Char('c') => {
-                                if event.modifiers == KeyModifiers::CONTROL {
-                                    exit(0x0100);
-                                }
+                            (KeyCode::Char('c'), KeyModifiers::CONTROL) => {
+                                disable_raw_mode().unwrap();
+                                exit(0x0100);
                             }
                             _ => (),
                         };
@@ -58,5 +67,9 @@ impl Display {
                 };
             }
         }
+    }
+
+    fn draw(&self) {
+        
     }
 }
