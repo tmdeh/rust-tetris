@@ -1,15 +1,11 @@
 use std::{
     io::{stdout, Stdout},
-    process::exit,
-    thread,
-    time::Duration,
 };
 
 use crossterm::{
-    event::{poll, read, Event, KeyCode, KeyModifiers},
-    terminal::{enable_raw_mode, disable_raw_mode},
+    terminal::{enable_raw_mode},
 };
-use tui::{backend::CrosstermBackend, Terminal};
+use tui::{backend::CrosstermBackend, Terminal, layout::{Layout, Constraint, Direction}};
 
 pub struct Display {
     terminal: Terminal<CrosstermBackend<Stdout>>, 
@@ -24,7 +20,6 @@ impl Display {
         let stdout = stdout();
         let backend =  CrosstermBackend::new(stdout);
         let terminal = Terminal::new(backend).unwrap();
-        
 
         Display {
             terminal,
@@ -33,9 +28,7 @@ impl Display {
         }
     }
 
-
-
     fn draw(&self) {
-        
+
     }
 }

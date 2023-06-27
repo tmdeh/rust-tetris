@@ -1,9 +1,8 @@
 
-mod display;
-mod key_input;
+mod controller;
 
 fn main() {
-    display::Display::new(100, 300);   
-    key_input::KeyInput::new();
+    let display = controller::Display::new(100, 300);   
+    let key_input = controller::KeyInput::new();
     loop {}
 }
