@@ -8,7 +8,8 @@ use crossterm::{
 use tui::{backend::CrosstermBackend, Terminal, layout::{ Rect }, widgets::{Block, Borders}, style::Style};
 
 pub struct Display {
-    terminal:Terminal<CrosstermBackend<Stdout>>, 
+    terminal:Terminal<CrosstermBackend<Stdout>>,
+    map: Vec<Vec<u8>>,
     width: u16,
     height: u16
 }
@@ -31,10 +32,18 @@ impl Display {
             panic!("터미널 크기가 충분하지 않습니다.");
         }
 
+        // 맵 데이터
+        let mut field = vec![];
+    
+        for _ in 0..11 {
+            field.push(vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        }
+
         Display {
             terminal,
             width: w,
             height: h,
+            map: field
         }
     }
 

@@ -1,4 +1,4 @@
-use std::{thread, time::Duration};
+use std::{thread, time::Duration, collections::btree_map::Range};
 
 use tetromino::Block;
 
@@ -14,10 +14,8 @@ fn main() {
     let mut display = controller::Display::new(W * M, H * M);   
     display.draw().unwrap();
     let _key_input = controller::KeyInput::new();
-
-    let block = Block::new();
     
-    println!("{:?}", block);
+    let block = Block::new();
 
     loop {
 
