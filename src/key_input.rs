@@ -1,44 +1,19 @@
-use std::{
-    io::{stdout, Stdout},
-    process::exit,
-    thread,
-    time::Duration,
-};
+use std::{thread, time::Duration, process::exit};
 
-use crossterm::{
-    event::{poll, read, Event, KeyCode, KeyModifiers},
-    terminal::{enable_raw_mode, disable_raw_mode},
-};
-use tui::{backend::CrosstermBackend, Terminal};
+use crossterm::{event::{poll, Event, KeyCode, KeyModifiers, read}, terminal::disable_raw_mode};
 
-pub struct Display {
-    stdout: Stdout,
-    // backend: CrosstermBackend<Stdout>,
-    terminal: Terminal<CrosstermBackend<Stdout>>, 
-    width: i32,
-    height: i32
-}
 
-impl Display {
-    pub fn new(w: i32, h: i32) -> Self {
-        enable_raw_mode().unwrap();
-        thread::spawn(Display::key_event);
+pub struct KeyInput {}
 
-        let stdout = stdout();
-        let backend =  CrosstermBackend::new(&stdout);
-        let terminal = Terminal::new(backend).unwrap();
-        
+impl KeyInput {
+    pub fn new() -> Self {
+        // 키 이벤트 쓰레드 생성
 
-        Display {
-            stdout,
-            backend,
-            terminal,
-            width: w,
-            height: h,
-        }
+        thread::spawn(KeyInput::key_event);
+        KeyInput { }
     }
 
-    pub fn key_event() -> crossterm::Result<()> {
+    fn key_event() -> crossterm::Result<()> {
         loop {
             if poll(Duration::from_millis(500))? {
                 match read()? {
@@ -69,7 +44,4 @@ impl Display {
         }
     }
 
-    fn draw(&self) {
-        
-    }
 }
