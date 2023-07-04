@@ -48,41 +48,55 @@ impl Block {
             BlockType::I => {
                 return vec![
                     vec![0, 0, 0, 0],
+                    vec![0, 0, 0, 0],
+                    vec![0, 0, 0, 0],
                     vec![1, 1, 1, 1]
                 ];
             },
             BlockType::O => {
                 return vec![
+                    vec![0, 0, 0, 0],
+                    vec![0, 0, 0, 0],
                     vec![2, 2, 0, 0],
                     vec![2, 2, 0, 0]
                 ];
             },
             BlockType::T => {
                 return vec![
+                    vec![0, 0, 0, 0],
+                    vec![0, 0, 0, 0],
                     vec![0,3,0,0],
                     vec![3,3,3,0]
                 ];
             }
             BlockType::L => {
                 return vec![
+                    vec![0, 0, 0, 0],
+                    vec![0, 0, 0, 0],
                     vec![0, 0, 4, 0],
                     vec![4, 4, 4, 0]
                 ];
             },
             BlockType::J => {
                 return vec![
+                    vec![0, 0, 0, 0],
+                    vec![0, 0, 0, 0],
                     vec![5, 0, 0, 0],
                     vec![5, 5, 5, 0]
                 ]
             },
             BlockType::S => {
                 return vec![
+                    vec![0, 0, 0, 0],
+                    vec![0, 0, 0, 0],
                     vec![0, 6, 6, 0],
                     vec![6, 6, 0, 0]
                 ]
             },
             BlockType::Z => {
                 return vec![
+                    vec![0, 0, 0, 0],
+                    vec![0, 0, 0, 0],
                     vec![7, 7, 0, 0],
                     vec![0, 7, 7, 0]
                 ]
