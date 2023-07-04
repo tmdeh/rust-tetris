@@ -1,9 +1,9 @@
 use std::{
-    io::{stdout, Stdout, self}, error::Error
+    io::{stdout, Stdout, self}
 };
 
 use crossterm::{
-    terminal::{enable_raw_mode}, execute, style,
+    terminal::{enable_raw_mode},
 };
 use tui::{backend::CrosstermBackend, Terminal, layout::{ Rect }, widgets::{Block, Borders}, style::Style};
 
@@ -35,10 +35,14 @@ impl Display {
         // 맵 데이터
         let mut field = vec![];
     
-        for _ in 0..11 {
-            field.push(vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        for i in 0..11 {
+            if i == 10 {
+                field.push(vec![9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]);
+                break;    
+            } 
+            field.push(vec![9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9]);
         }
-
+        
         Display {
             terminal,
             width: w,
