@@ -1,67 +1,53 @@
-use std::{
-    io::{stdout, Stdout, self}
-};
+use std::{io::{stdout, Write, Stdout}};
 
-use crossterm::{
-    terminal::{enable_raw_mode},
-};
-use tui::{backend::CrosstermBackend, Terminal, layout::{ Rect }, widgets::{Block, Borders}, style::Style};
+use crossterm::{QueueableCommand, cursor, style::{ self }, ExecutableCommand, terminal};
 
 pub struct Display {
-    terminal:Terminal<CrosstermBackend<Stdout>>,
     map: Vec<Vec<u8>>,
-    width: u16,
-    height: u16
+    stdout: Stdout
 }
 
 impl Display {
-    pub fn new(w: u16, h: u16) -> Self {
-        let stdout = stdout();
-        let backend =  CrosstermBackend::new(stdout);
-        let mut terminal = Terminal::new(backend).expect("터미널 오류 발생");
+    pub fn new() -> Self {
 
-        enable_raw_mode().unwrap();
-        terminal.hide_cursor().unwrap();
-        terminal.clear().unwrap();
-
-
-        let frame = terminal.get_frame();
-
-        let size = frame.size();
-        if size.width < w && size.height < h {
-            panic!("터미널 크기가 충분하지 않습니다.");
-        }
 
         // 맵 데이터
         let mut field = vec![];
     
-        for i in 0..11 {
-            if i == 10 {
+        for i in 0..21 {
+            if i == 20 {
                 field.push(vec![9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]);
                 break;    
             } 
             field.push(vec![9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9]);
         }
-        
+        let mut stdout = stdout();
+
+        stdout.execute(terminal::Clear(terminal::ClearType::All)).unwrap();
+        stdout.execute(cursor::DisableBlinking).unwrap();
+
         Display {
-            terminal,
-            width: w,
-            height: h,
-            map: field
+            map: field,
+            stdout: stdout
         }
     }
 
 
 
-    pub fn draw(& mut self) -> Result<(), io::Error> {
-
-        self.terminal.draw(|f| {
-            let size = Rect::new(0, 0, self.width, self.height);
-            let block = Block::default()
-            .title("Tetris")
-            .borders(Borders::ALL);
-            f.render_widget(block, size);
-        })?;
+    pub fn draw(& mut self) -> std::io::Result<()> {
+        for (y, line) in self.map.iter().enumerate() {
+          for (x, v) in line.iter().enumerate() {
+            self.stdout.queue(cursor::MoveTo((x + 3) as u16,y as u16))?;
+            if *v == 9 {
+              self.stdout
+                    .queue(style::Print( "\x1b[42m  \x1b[0m"))?;
+            } else {
+                self.stdout
+                    .queue(style::Print( "\x1b[40m  \x1b[0m"))?;
+            }
+          }
+        }
+        self.stdout.flush()?;
         Ok(())
     }
 }

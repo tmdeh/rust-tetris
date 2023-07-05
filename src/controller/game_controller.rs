@@ -1,10 +1,9 @@
 
+use std::thread;
+use std::time::Duration;
+
 use crate::controller::Display;
 use crate::controller::KeyInput;
-
-const W: u16 = 10;
-const H: u16 = 20;
-const M: u16 = 1;
 
 // 게임 흐름 제어 객체
 enum GameState {
@@ -24,17 +23,15 @@ impl GameController {
     pub fn new() -> Self {
         GameController { 
             state: GameState::PROGRESS,
-            display: Display::new(W * M, H * M),
+            display: Display::new(),
             keyInput: KeyInput::new()
         }
     }
 
     pub fn run(&mut self) {
-
-        self.display.draw().unwrap();
-
         loop {
-        
+            self.display.draw().unwrap();
+            thread::sleep(Duration::from_millis(100))
         }
     }
 
