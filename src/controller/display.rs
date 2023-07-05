@@ -37,7 +37,7 @@ impl Display {
     pub fn draw(& mut self) -> std::io::Result<()> {
         for (y, line) in self.map.iter().enumerate() {
           for (x, v) in line.iter().enumerate() {
-            self.stdout.queue(cursor::MoveTo((x + 3) as u16,y as u16))?;
+            self.stdout.queue(cursor::MoveTo(x as u16,y as u16))?;
             if *v == 9 {
               self.stdout
                     .queue(style::Print( "\x1b[42m  \x1b[0m"))?;
